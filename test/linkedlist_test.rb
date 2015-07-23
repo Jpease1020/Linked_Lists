@@ -34,9 +34,6 @@ class LinkedListTest < Minitest::Test
     assert_equal 5, list.tail.value
   end
 
-
-  #edge-case example: call append on new list(head only)
-
   def test_it_can_prepend_to_beginning_of_list
     list = LinkedList.new("start")
     list.append("Jeff")
@@ -45,8 +42,6 @@ class LinkedListTest < Minitest::Test
     list.prepend("apple")
     assert_equal "apple", list.head.value
   end
-
-  #can now use append instead of creating new nodes
 
   def test_it_can_insert_a_new_node_at_a_numbered_position
     list = LinkedList.new("Justin")
@@ -118,14 +113,25 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_can_remove_node_by_index
-    skip
-    list = LinkedList.new("start")
+    list = LinkedList.new("Bob")
     list.append("Jeff")
     list.append("Ryan")
     list.append("Adam")
     assert list.include?("Ryan")
-    assert_equal 3, list.find_by_value("Ryan")
-    list.remove_by_index(3)
+    assert_equal 4, list.count
+    list.remove_by_index(2)
     refute list.include?("Ryan")
+    assert_equal 3, list.count
+  end
+
+  def test_can_remove_node_by_value
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert list.include?("Ryan")
+    list.remove_by_value("Ryan")
+    refute list.include?("Ryan")
+    assert_equal 3, list.count
   end
 end
