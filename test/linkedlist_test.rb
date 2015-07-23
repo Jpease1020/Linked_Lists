@@ -5,6 +5,11 @@ require_relative "../lib/linkedlist"
 
 class LinkedListTest < Minitest::Test
 
+  def test_a_list_must_have_a_node
+    list = LinkedList.new
+    refute_equal 0, list.count
+  end
+
   def test_a_new_list_has_a_nil_head
     list = LinkedList.new
     result = list.head
@@ -60,6 +65,34 @@ class LinkedListTest < Minitest::Test
     assert_equal "hello", list.head.pointer.pointer.pointer.value
   end
 
+  def test_it_can_insert_a_new_node_at_last_position
+    list = LinkedList.new("Justin")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    list.insert(5, "Alex")
+    assert_equal "Alex", list.tail.value
+  end
+
+  def test_it_can_insert_a_new_node_at_first_position
+    list = LinkedList.new("Justin")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    list.insert(1, "Alex")
+    assert_equal "Alex", list.head.value
+  end
+
+  def test_it_will_not_allow_node_added_at_position_zero
+    list = LinkedList.new("Justin")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    list.insert(0, "Alex")
+    assert_equal "Justin", list.head.value
+    refute list.include?("Alex")
+  end
+
   def test_insert_a_node_at_a_specific_value_position
     skip
     list = LinkedList.new("Sally")
@@ -79,6 +112,20 @@ class LinkedListTest < Minitest::Test
     assert_equal "Adam", list.tail.value
     list.pop
     assert_equal "Ryan", list.tail.value
+  end
+
+  def test_pop_only_pops_the_last_node
+    list = LinkedList.new("Barry")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert_equal "Adam", list.tail.value
+    list.pop
+    assert_equal "Ryan", list.tail.value
+    refute_equal "Adam", list.tail.value
+    assert list.include?("Jeff")
+    assert list.include?("Ryan")
+    assert list.include?("Barry")
   end
 
   def test_can_find_if_a_specific_value_is_in_the_list
@@ -117,6 +164,14 @@ class LinkedListTest < Minitest::Test
     list.append("Ryan")
     list.append("Adam")
     assert_equal "Jeremy", list.find_by_index(1)
+  end
+
+  def test_it_can_find_multiple_values_by_index
+    list = LinkedList.new("Jeremy")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert_equal "Jeremy", list.find_by_index(1)
     assert_equal "Jeff", list.find_by_index(2)
     assert_equal "Ryan", list.find_by_index(3)
     assert_equal "Adam", list.find_by_index(4)
@@ -142,6 +197,30 @@ class LinkedListTest < Minitest::Test
     assert_equal 3, list.count
   end
 
+  def test_can_remove_head_node_by_index
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert list.include?("Ryan")
+    assert_equal 4, list.count
+    list.remove_by_index(1)
+    refute list.include?("Bob")
+    assert_equal 3, list.count
+  end
+
+  def test_can_remove_tail_node_by_index
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert list.include?("Ryan")
+    assert_equal 4, list.count
+    list.remove_by_index(4)
+    refute list.include?("Adam")
+    assert_equal 3, list.count
+  end
+
   def test_can_remove_node_by_value
     list = LinkedList.new("Bob")
     list.append("Jeff")
@@ -151,6 +230,44 @@ class LinkedListTest < Minitest::Test
     list.remove_by_value("Ryan")
     refute list.include?("Ryan")
     assert_equal 3, list.count
+  end
+
+  def test_can_remove_head_node_by_value
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert list.include?("Bob")
+    list.remove_by_value("Bob")
+    refute list.include?("Bob")
+    assert_equal 3, list.count
+  end
+
+  def test_will_not_blow_up_if_desired_value_to_be_removed_is_not_in_list
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    assert_equal 4, list.count
+    list.remove_by_value("Alex")
+    assert_equal 4, list.count
+  end
+
+  # def test_pop_returns_the_popped_node
+  # end
+
+  def test_can_find_the_distance_between_two_nodes
+    list = LinkedList.new("Bob")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    list.append("Derek")
+    list.append("Reggie")
+    assert_equal 3, list.node_distance("Ryan", "Reggie")
+    assert_equal 5, list.node_distance("Bob", "Reggie")
+    assert_equal 3, list.node_distance("Ryan", "Reggie")
+    assert_equal 2, list.node_distance("Derek", "Ryan")
+    assert_equal 5, list.node_distance("Reggie", "Bob")
   end
 
 end
