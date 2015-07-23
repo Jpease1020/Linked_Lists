@@ -1,27 +1,30 @@
-require_relative './node'
-require 'pry'
+require_relative './node'  # => true
+require 'pry'              # => true
 class LinkedList
 
-  attr_accessor :head, :index
+  attr_accessor :head, :index  # => nil
   def initialize(value = nil)
-    @head = Node.new(value)
+    @head = Node.new(value)    # => #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=nil>
+  end                          # => :initialize
+
+  def position
   end
 
   def tail
-    temp = @head
-    until temp.pointer == nil
-      temp = temp.pointer
-    end
-    temp
-  end
+    temp = @head               # => #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=nil>, #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=#<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=nil>>, #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=#<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=#<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>>>
+    until temp.pointer == nil  # => true, false, true, false, false, true
+      temp = temp.pointer      # => #<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=nil>, #<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=#<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>>, #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>
+    end                        # => nil, nil, nil
+    temp                       # => #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=nil>, #<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=nil>, #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>
+  end                          # => :tail
 
   def append(value)
-    tail.pointer = Node.new(value)
-  end
+    tail.pointer = Node.new(value)  # => #<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=nil>, #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>, #<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>
+  end                               # => :append
 
   def prepend(value)
     @head = Node.new(value, @head)
-  end
+  end                               # => :prepend
 
   def insert(position, value)
     if position > count + 1
@@ -40,7 +43,7 @@ class LinkedList
     end
       temp_pointer = temp.pointer
       temp.pointer = Node.new(value, temp_pointer)
-  end
+  end                                               # => :insert
 
   def pop
     temp = @head
@@ -48,7 +51,7 @@ class LinkedList
       temp = temp.pointer
     end
     temp.pointer = nil
-  end
+  end                           # => :pop
 
   def include?(search_value)
     temp = @head
@@ -60,7 +63,7 @@ class LinkedList
     else
       false
     end
-  end
+  end                                                      # => :include?
 
   def count
     temp = @head
@@ -70,7 +73,7 @@ class LinkedList
       index += 1
     end
     index
-  end
+  end                          # => :count
 
   def find_by_index(index)
     temp = @head
@@ -80,7 +83,7 @@ class LinkedList
       temp = temp.pointer
     end
       temp.value
-  end
+  end                       # => :find_by_index
 
   def find_by_value(search_value)
     temp = @head
@@ -90,30 +93,36 @@ class LinkedList
       temp = temp.pointer
     end
       counter
-  end
+  end                                 # => :find_by_value
 
   def remove_by_index(index)
-    if index == 0
+    if index == 1                        # => false
       @head = head.pointer
       return
     end
-    temp = @head
-    counter = 0
-    until counter == index - 1
+    temp = @head                         # => #<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=#<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=#<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=#<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>>>>
+    counter = 1                          # => 1
+    until counter == index - 1           # => true
       temp = temp.pointer
       counter += 1
-    end
-    temp.pointer = temp.pointer.pointer
-  end
+    end                                  # => nil
+    temp.pointer = temp.pointer.pointer  # => #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=#<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>>
+  end                                    # => :remove_by_index
 
   def remove_by_value(value)
     temp = @head
-    counter = 1
     until temp.pointer.value == value
       temp = temp.pointer
-      counter += 1
     end
     temp.pointer = temp.pointer.pointer
-  end
+  end                                    # => :remove_by_value
 
-end
+end  # => :remove_by_value
+
+list = LinkedList.new("Bob")  # => #<LinkedList:0x007fbaeb1dcdf8 @head=#<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=nil>>
+list.append("Jeff")           # => #<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=nil>
+list.append("Ryan")           # => #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=nil>
+list.append("Adam")           # => #<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>
+list                          # => #<LinkedList:0x007fbaeb1dcdf8 @head=#<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=#<Node:0x007fbaeb1d7f38 @value="Jeff", @pointer=#<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=#<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>>>>>
+list.remove_by_index(2)       # => #<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=#<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>>
+list                          # => #<LinkedList:0x007fbaeb1dcdf8 @head=#<Node:0x007fbaeb1dcdd0 @value="Bob", @pointer=#<Node:0x007fbaeb1d63e0 @value="Ryan", @pointer=#<Node:0x007fbaeb1d45b8 @value="Adam", @pointer=nil>>>>

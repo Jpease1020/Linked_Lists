@@ -17,6 +17,11 @@ class LinkedListTest < Minitest::Test
     assert_equal "Start", result.value
   end
 
+  def test_head_is_tail_in_one_node_list
+    list = LinkedList.new(4)
+    assert_equal list.head, list.tail
+  end
+
   def test_tail_can_be_found
     list = LinkedList.new("start")
     list.append("Jeff")
@@ -85,7 +90,20 @@ class LinkedListTest < Minitest::Test
     refute list.include?("Arron")
   end
 
-  def test_can_count_nodes
+  def test_can_not_find_if_a_specific_value_is_not_in_the_list
+    list = LinkedList.new("Jeremy")
+    list.append("Jeff")
+    list.append("Ryan")
+    list.append("Adam")
+    refute list.include?("Arron")
+  end
+
+  def test_can_count_one_node
+    list = LinkedList.new("Jeremy")
+    assert_equal 1, list.count
+  end
+
+  def test_can_count_multiple_nodes
     list = LinkedList.new("Jeremy")
     list.append("Jeff")
     list.append("Ryan")
@@ -120,7 +138,7 @@ class LinkedListTest < Minitest::Test
     assert list.include?("Ryan")
     assert_equal 4, list.count
     list.remove_by_index(2)
-    refute list.include?("Ryan")
+    refute list.include?("Jeff")
     assert_equal 3, list.count
   end
 
@@ -134,4 +152,5 @@ class LinkedListTest < Minitest::Test
     refute list.include?("Ryan")
     assert_equal 3, list.count
   end
+
 end
